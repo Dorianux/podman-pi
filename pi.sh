@@ -72,7 +72,7 @@ if [ "$DO_INSTALL" = true ]; then
     done
 
     if [ -z "$SHELL_CONFIG" ]; then
-        echo "Error: Could not find ~/.zshrc.local, ~/.zshrc, or ~/.bashrc"
+        >&2 echo "Error: Could not find ~/.zshrc.local, ~/.zshrc, or ~/.bashrc"
         exit 1
     fi
 
@@ -82,7 +82,7 @@ if [ "$DO_INSTALL" = true ]; then
 
     for alias_name in "pi" "pic" "picommit"; do
         if grep -q "^alias $alias_name=" "$SHELL_CONFIG" || grep -q "^alias $alias_name =" "$SHELL_CONFIG"; then
-            echo "Updating '$alias_name' alias in $SHELL_CONFIG..."
+            >&2 echo "Updating '$alias_name' alias in $SHELL_CONFIG..."
             grep -v "^alias $alias_name=" "$SHELL_CONFIG" | grep -v "^alias $alias_name =" > "$SHELL_CONFIG.tmp" && mv "$SHELL_CONFIG.tmp" "$SHELL_CONFIG"
         else
             echo "Installing '$alias_name' alias in $SHELL_CONFIG..."
@@ -100,29 +100,35 @@ if [ "$DO_INSTALL" = true ]; then
                 ;;
         esac
     done
-    echo "Successfully installed/updated aliases. Please run 'source $SHELL_CONFIG' or restart your terminal."
+    >&2 echo "Successfully installed/updated aliases. Please run 'source $SHELL_CONFIG' or restart your terminal."
     exit 0
 fi
 
 # --update flag
 if [ "$DO_UPDATE" = true ]; then
     cd "$SCRIPT_DIR"
-    CURRENT_VERSION=$(docker run --rm pi-coding-agent --version)
+    CURRENT_VERSION=$(./build.sh --installed-version)
     LATEST_VERSION=$(curl -s https://registry.npmjs.org/@mariozechner/pi-coding-agent/latest | jq -r .version)
-    echo "Latest pi version: $LATEST_VERSION"
+
+    >&2 echo "Latest pi version:            $LATEST_VERSION"
+    >&2 echo "Current installed pi version: $CURRENT_VERSION"
+
     if [ "$CURRENT_VERSION" == "$LATEST_VERSION" ]; then
-        echo "Already up to date!"
+        >&2 echo "Already up to date!"
         exit 0
     else
-        echo "Updating pi to version $LATEST_VERSION ..."
+        >&2 echo "Updating pi to version $LATEST_VERSION ..."
     fi
+
     ./build.sh "$LATEST_VERSION"
-    echo "Updating configured packages ..."
+    >&2 echo "Updating configured packages ..."
     ./pi.sh update
-    UPDATED_VERSION=$(docker run --rm pi-coding-agent --version)
-    echo "Updated to pi version: $UPDATED_VERSION"
-    if [ "$CURRENT_VERSION" == "$UPDATED_VERSION" ]; then
-        echo " Version did not change!"
+
+    UPDATED_VERSION=$(./build.sh --installed-version)
+    >&2 echo "Updated to pi version: $UPDATED_VERSION"
+
+    if [ "$UPDATED_VERSION" != "$LATEST_VERSION" ]; then
+        >&2 echo "Warning: expected version $LATEST_VERSION but got $UPDATED_VERSION"
     fi
     exit 0
 fi
@@ -131,7 +137,7 @@ fi
 if [ "$DO_SESSIONS" = true ]; then
     SESSIONS_DIR="$SCRIPT_DIR/pi/agent/sessions"
     if [ ! -d "$SESSIONS_DIR" ]; then
-        echo "No sessions found at $SESSIONS_DIR"
+        >&2 echo "No sessions found at $SESSIONS_DIR"
         exit 0
     fi
     BOLD='\033[1m'
@@ -146,13 +152,16 @@ if [ "$DO_SESSIONS" = true ]; then
             continue
         fi
         count=$(find "$dir" -maxdepth 1 -mindepth 1 -type f -name "*.jsonl" | wc -l)
-        echo -e "${BOLD}${GREEN}$basename_dir${NC}: $count sessions"
+        >&2 echo -e "${BOLD}${GREEN}$basename_dir${NC}: $count sessions"
         find "$dir" -maxdepth 1 -mindepth 1 -type f -name "*.jsonl" -exec basename {} \; | sort -r | head -n 5 | while read -r session; do
-            echo "  - $session"
+            >&2 echo "  - $session"
         done
     done
     exit 0
 fi
+
+# map cache dirs used by my pi
+mkdir -p "$SCRIPT_DIR/.cache/checkouts"
 
 
 DEBUGFLAGS=""
@@ -162,12 +171,12 @@ DEBUGFLAGS=""
 
 if [ -f ".pi_ro" ]; then
     MOUNT_MODE="ro"
-    echo "WARNING: .pi_ro found in current directory. Forcing READ-ONLY mount."
+    >&2 echo "WARNING: .pi_ro found in current directory. Forcing READ-ONLY mount."
 fi
 
-echo "INFO: Using env file: $SCRIPT_DIR/.env"
+>&2 echo "INFO: Using env file: $SCRIPT_DIR/.env"
 if [ -n "$DEBUGFLAGS" ]; then
-    echo "INFO: docker run flags: $DEBUGFLAGS"
+    >&2 echo "INFO: docker run flags: $DEBUGFLAGS"
 fi
 
 # Find the project root by looking for .git, .project, or .projectile
@@ -191,13 +200,13 @@ fi
 # Matches logic in session-manager.js: cwd.replace(/^[/\\]/, "").replace(/[/\\:]/g, "-")
 CWD_SAFE=$(echo "$PROJECT_ROOT" | sed 's|^[/\\]||' | sed 's|[/\\:]|-|g')
 SESSION_DIR="/home/pi/.pi/agent/sessions/--${CWD_SAFE}--"
-SESSION_DIR_CMD="--session-dir $SESSION_DIR"
+SESSION_DIR_CMD=(--session-dir "$SESSION_DIR")
 
 # If first arg is a command, don't use TOOLS or SESSION_DIR_CMD
 case "$1" in
     install|remove|update|list|config)
         TOOLS=""
-        SESSION_DIR_CMD=""
+        SESSION_DIR_CMD=()
         ;;
 esac
 
@@ -205,24 +214,27 @@ esac
 REL_PATH=${PWD:${#PROJECT_ROOT}}
 REL_PATH=${REL_PATH#/}
 
-echo "INFO: Using project root: $PROJECT_ROOT"
+>&2 echo "INFO: Using project root: $PROJECT_ROOT"
 if [ -n "$REL_PATH" ]; then
-    echo "INFO: Using relative path: $REL_PATH"
+    >&2 echo "INFO: Using relative path: $REL_PATH"
 fi
 if [ "$MOUNT_MODE" = "ro" ]; then
-    echo "INFO: Mounting /workspace as READ-ONLY"
+    >&2 echo "INFO: Mounting /workspace as READ-ONLY"
 fi
-echo "_____________________________________________"
+>&2 echo "_____________________________________________"
 
 # Determine if we are in an interactive terminal
-INTERACTIVE_FLAGS="-it"
-if [ ! -t 0 ]; then
-    INTERACTIVE_FLAGS=""
+INTERACTIVE_FLAGS=""
+if [ -t 0 ] && [ -t 1 ]; then
+    INTERACTIVE_FLAGS="-it"
+else
+    >&2 echo "INFO: Runnin in non-interactive mode."
 fi
 
 docker run --rm $INTERACTIVE_FLAGS \
   -v "$PROJECT_ROOT":/workspace:$MOUNT_MODE \
   -v "$SCRIPT_DIR/pi":/home/pi/.pi:rw \
+  -v "$SCRIPT_DIR/.cache/checkouts":/home/pi/.cache/checkouts:rw \
   -w "/workspace/$REL_PATH" \
   -e PI_PROJECT_ROOT="$PROJECT_ROOT" \
   -e PI_MOUNT_MODE="$MOUNT_MODE" \
@@ -237,4 +249,4 @@ docker run --rm $INTERACTIVE_FLAGS \
   ${OPENROUTER_API_KEY:+-e OPENROUTER_API_KEY} \
   ${PI_CACHE_RETENTION:+-e PI_CACHE_RETENTION} \
   --env-file "$SCRIPT_DIR/.env" $DEBUGFLAGS \
-  pi-coding-agent $TOOLS $SESSION_DIR_CMD "${@}"
+  pi-coding-agent $TOOLS "${SESSION_DIR_CMD[@]}" "${@}"

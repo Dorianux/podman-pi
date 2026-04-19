@@ -1,10 +1,10 @@
 {
-  "lastChangelogVersion": "0.53.0",
+  "lastChangelogVersion": "0.67.67",
   "theme": "light",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-opus-4.6",
-  "defaultThinkingLevel": "high",
-  "hideThinkingBlock": true,
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.3-codex",
+  "defaultThinkingLevel": "xhigh",
+  "hideThinkingBlock": false,
   "shellPath": "/bin/zsh",
   "shellCommandPrefix": "setopt aliases\nsource ~/.zshrc",
   "images": {
@@ -13,28 +13,43 @@
   "editorPaddingX": 0,
   "collapseChangelog": true,
   "enabledModels": [
-    "kilo-code/z-ai/glm-5:free",
-    "kilo-code/openrouter/free",
-    "kilo-code/openai/gpt-oss-120b",
     "kilo-code/minimax/minimax-m2.5:free",
     "kilo-code/deepseek/deepseek-r1-0528",
-    "github-copilot/gpt-5.2",
-    "github-copilot/gemini-3-pro-preview",
+    "kilo-code/openai/gpt-oss-120b",
     "github-copilot/gemini-3-flash-preview",
-    "github-copilot/gpt-5.2-codex",
-    "github-copilot/claude-opus-4.6"
+    "kilo-code/z-ai/glm-5",
+    "github-copilot/gemini-3-pro-preview",
+    "github-copilot/gemini-3.1-pro-preview",
+    "github-copilot/claude-opus-4.6",
+    "openai-codex/gpt-5.3-codex-spark",
+    "openai-codex/gpt-5.3-codex",
+    "google-antigravity/claude-opus-4-6-thinking",
+    "google-antigravity/claude-sonnet-4-5-thinking",
+    "google-antigravity/gemini-3-flash",
+    "google-antigravity/gemini-3-pro-high",
+    "google-antigravity/gemini-3-pro-low"
   ],
   "packages": [
     {
       "source": "git:github.com/mitsuhiko/agent-stuff",
       "extensions": [
         "-pi-extensions/files.ts",
-        "-pi-extensions/loop.ts"
+        "-pi-extensions/loop.ts",
+        "-pi-extensions/go-to-bed.ts"
       ],
       "skills": [
         "-skills/web-browser/SKILL.md",
-        "-skills/openscad/SKILL.md"
+        "-skills/openscad/SKILL.md",
+        "-skills/apple-mail/SKILL.md"
+      ],
+      "themes": [
+        "+pi-themes/nightowl.json"
       ]
-    }
+    },
+    "git:github.com/lucasmeijer/pi-terminal-signals"
+  ],
+  "extensions": [
+    "-extensions/antigravity-quota.ts",
+    "-extensions/copilot-quota.ts"
   ]
 }
