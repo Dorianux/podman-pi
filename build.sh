@@ -10,5 +10,5 @@ fi
 VERSION=${1:-latest}
 BUILDARGS="--build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg VERSION=$VERSION"
 
-docker build $BUILDARGS -t pi-coding-agent -f "$SCRIPT_DIR/Dockerfile.release" "$SCRIPT_DIR"
-#docker build $BUILDARGS -t pi-coding-agent -f "$SCRIPT_DIR/Dockerfile.git" "$SCRIPT_DIR"
+podman build $BUILDARGS -t pi-coding-agent -f "$SCRIPT_DIR/Dockerfile.release" "$SCRIPT_DIR"
+#podman build $BUILDARGS -t pi-coding-agent -f "$SCRIPT_DIR/Dockerfile.git" "$SCRIPT_DIR"

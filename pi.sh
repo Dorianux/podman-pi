@@ -176,7 +176,7 @@ fi
 
 >&2 echo "INFO: Using env file: $SCRIPT_DIR/.env"
 if [ -n "$DEBUGFLAGS" ]; then
-    >&2 echo "INFO: docker run flags: $DEBUGFLAGS"
+    >&2 echo "INFO: podman run flags: $DEBUGFLAGS"
 fi
 
 # Find the project root by looking for .git, .project, or .projectile
@@ -231,7 +231,7 @@ else
     >&2 echo "INFO: Runnin in non-interactive mode."
 fi
 
-docker run --rm $INTERACTIVE_FLAGS \
+podman run --rm $INTERACTIVE_FLAGS \
   -v "$PROJECT_ROOT":/workspace:$MOUNT_MODE \
   -v "$SCRIPT_DIR/pi":/home/pi/.pi:rw \
   -v "$SCRIPT_DIR/.cache/checkouts":/home/pi/.cache/checkouts:rw \

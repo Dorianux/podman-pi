@@ -1,48 +1,334 @@
 {
     "providers": {
-        "ollama": {
+        "openrouter":
+        {
+            "baseUrl": "https://openrouter.ai/api/v1",
+            "apiKey": "OPENROUTER_API_KEY",
+            "api": "openai-completions",
+            "models":
+            [
+                {
+                    "id": "openrouter/anthropic/claude-sonnet-4.5",
+                    "name": "OpenRouter Claude 4.5 Sonnet",
+                    "compat":
+                    {
+                        "openRouterRouting":
+                        {
+                            "order":
+                            [
+                                "anthropic"
+                            ],
+                            "fallbacks":
+                            [
+                                "openai"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "cortecs":
+        {
+            "baseUrl": "https://api.cortecs.ai/v1",
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6ImQ3MTk0MTIwZGI0YjkzZDAyMzBiNmVlNjUwODI3YTg0YzZmMGI0YTQ5OWZkMDdkYWY2NDIwNGI2MDk3YWFkNzVjY2I5MDM3ZTRhMDJkMWFiY2ZiMmYzNmU5Mzc2OWQ2NyIsInVzZXJJZCI6ImF1dGgwfDY5YjhmOWUzN2NmNTNmZDI2OTZhNmE2YSIsImlhdCI6MTc3MzczMDM4Nn0.-AYlxuOythyM698xBkBaLNvrDROKm7oW7Ja6T1Npuls",
+            "api": "openai-completions",
+            "models":
+            [
+                    
+                {
+                    "id": "voxtral-small-2507",
+                    "name": "CORTECS voctral-small 2507 (Austria)",
+                    "__doc__": "OK",
+                    "contextWindow": 32000,
+                    "cost":
+                    {
+                        "input": 0.105,
+                        "output": 0.315,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                },
+                {
+                    "id": "gpt-oss-120b",
+                    "name": "CORTECS GPT OSS 120b (Austria)",
+                    "contextWindow": 128000,
+                    "cost":
+                    {
+                        "input": 0.17,
+                        "output": 0.66,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                },
+                {
+                    "id": "claude-4-6-sonnet",
+                    "name": "CORT/ECS Claude 4.6 Sonnet (Austria)",
+                    "contextWindow": 1000000,
+                    "cost":
+                    {
+                        "input": 3.1,
+                        "output": 15.5,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+
+                },
+                {
+                    "id": "claude-opus4-6",
+                    "name": "CORTECS Claude Opus 4.6  (Austria-NOT)",
+                    "contextWindow": 1000000,
+                    "cost":
+                    {
+                        "input": 5.2,
+                        "output": 25.85,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                },
+                {
+                    "id": "minimax-m2.5",
+                    "name": "CORTECS MiniMax M2.5  (EU)",
+                    "contextWindow": 196000,
+                    "cost":
+                    {
+                        "input": 0.28,
+                        "output": 1.03,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                }
+            ]
+        },
+        "edenai":
+        {
+            "baseUrl": "https://api.edenai.run/v3/llm/",
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWJjZjcxMWYtZDllZC00Y2MwLTkxZjYtY2M5YWZjMDMyOGM4IiwidHlwZSI6ImFwaV90b2tlbiJ9.LbkVJBl9gI4e6OLAYuYLB9QJ7616zUB8N0nSmVBeCTk",
+            "api": "openai-completions",
+            "models":
+            [
+                    
+                {
+                    "id": "google/gemini-pro-latest",
+                    "name": "Gemini Pro Latest  (Edenai - France)",
+                    "__doc__": "credit"
+                },
+                {
+                    "id": "anthropic/claude-opus-4-6",
+                    "name": "Claude Opus 4.6  (Edenai - France)",
+                    "contextWindow": 1000000,
+                    "cost":
+                    {
+                        "input": 5,
+                        "output": 25,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                },
+                {
+                    "id": "anthropic/claude-sonnet-4-6",
+                    "name": "Claude Sonnet 4.6  (Edenai - France)",
+                    "contextWindow": 200000,
+                    "cost":
+                    {
+                        "input": 3,
+                        "output": 15,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                },
+                {
+                    "id": "databricks/databricks-gpt-oss-120b",
+                    "name": "GPT OSS 120b  (Edenai - France)",
+                    "contextWindow": 128000,
+                    "cost":
+                    {
+                        "input": 0.15,
+                        "output": 0.6,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    }
+                }
+
+            ]
+        },
+        "ollama":
+        {
             "baseUrl": "http://host.docker.internal:11434/v1",
             "api": "openai-completions",
             "apiKey": "ollama",
-            "models": []
+            "models":
+            [
+                {
+                    "id": "gemma4:26b",
+                    "name": "Gemma-4:26b (Local MacBook Ollama)",
+                    "contextWindow": 255000,
+                    "maxTokens": 80000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": true
+                },
+                {
+                    "id": "Qwen3.5:27b",
+                    "name": "Qwen3.5:27b (Local MacBook)",
+                    "contextWindow": 200000,
+                    "maxTokens": 120000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": true
+                },
+                {
+                    "id": "codellama:34b",
+                    "name": "Codellama:34b (Local MacBook)",
+                    "contextWindow": 16000,
+                    "maxTokens": 12000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                },
+                {
+                    "id": "mistral-nemo:12b",
+                    "name": "mistral-nemo:12b (Local MacBook)",
+                    "contextWindow": 1000000,
+                    "maxTokens": 64000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                },
+                {
+                    "id": "llama3.2:3b",
+                    "name": "llama3.2:3b (Local MacBook)",
+                    "contextWindow": 128000,
+                    "maxTokens": 64000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                },
+                {
+                    "id": "gemma3:27b",
+                    "name": "gemma3:27b (Local MacBook)",
+                    "contextWindow": 128000,
+                    "maxTokens": 64000,
+                    "input":
+                    [
+                        "text",
+                        "image"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                },
+                {
+                    "id": "phi4:14b",
+                    "name": "phi4:14b (Local MacBook)",
+                    "contextWindow": 16000,
+                    "maxTokens": 16000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                },
+                {
+                    "id": "devstral-small-2:24b",
+                    "name": "devstral-small-2:24b (Local MacBook)",
+                    "contextWindow": 384000,
+                    "maxTokens": 16000,
+                    "input":
+                    [
+                        "text"
+                    ],
+                    "cost":
+                    {
+                        "input": 0,
+                        "output": 0,
+                        "cacheRead": 0,
+                        "cacheWrite": 0
+                    },
+                    "reasoning": false
+                }
+                
+
+            ],
+            "cost":
+            {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0
+            },
+            "input":
+            [
+                "text"
+            ]
         },
-        "lmstudio": {
+        "lmstudio":
+        {
             "baseUrl": "http://host.docker.internal:11435/v1",
             "api": "openai-completions",
             "apiKey": "lmstudio",
-            "models": [
-                {
-                    "id": "google/gemma-3-4b",
-                    "name": "LM Studio: Gemma 3 4B",
-                    "contextWindow": 131072
-                },
-                {
-                    "id": "deepseek/deepseek-r1-0528-qwen3-8b",
-                    "name": "LM Studio: Deepseek R1 0528 Qwen3 8B",
-                    "reasoning": true,
-                    "contextWindow": 131072
-                },
-                {
-                    "id": "google/gemma-3-12b",
-                    "name": "LM Studio: Gemma 3 12B",
-                    "contextWindow": 131072
-                },
-                {
-                    "id": "qwen/qwen3-14b",
-                    "name": "LM Studio: Qwen3 14B",
-                    "reasoning": true,
-                    "contextWindow": 40960
-                },
-                {
-                    "id": "openai/gpt-oss-20b",
-                    "name": "LM Studio: GPT OSS 20B",
-                    "reasoning": true,
-                    "contextWindow": 131072
-                },
+            "models":
+            [
                 {
                     "id": "mistralai/devstral-small-2-2512",
                     "name": "LM Studio: Devstral Small 2 2512",
-                    "contextWindow": 393216
+                    "contextWindow": 256000
                 }
             ]
         }

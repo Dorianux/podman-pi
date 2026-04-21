@@ -1,9 +1,9 @@
 {
-  "lastChangelogVersion": "0.67.67",
-  "theme": "light",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.3-codex",
-  "defaultThinkingLevel": "xhigh",
+  "lastChangelogVersion": "0.68.0",
+  "theme": "dark",
+  "defaultProvider": "cortecs",
+  "defaultModel": "claude-4-6-sonnet",
+  "defaultThinkingLevel": "off",
   "hideThinkingBlock": false,
   "shellPath": "/bin/zsh",
   "shellCommandPrefix": "setopt aliases\nsource ~/.zshrc",
@@ -13,16 +13,9 @@
   "editorPaddingX": 0,
   "collapseChangelog": true,
   "enabledModels": [
-    "kilo-code/minimax/minimax-m2.5:free",
-    "kilo-code/deepseek/deepseek-r1-0528",
-    "kilo-code/openai/gpt-oss-120b",
-    "github-copilot/gemini-3-flash-preview",
-    "kilo-code/z-ai/glm-5",
     "github-copilot/gemini-3-pro-preview",
     "github-copilot/gemini-3.1-pro-preview",
     "github-copilot/claude-opus-4.6",
-    "openai-codex/gpt-5.3-codex-spark",
-    "openai-codex/gpt-5.3-codex",
     "google-antigravity/claude-opus-4-6-thinking",
     "google-antigravity/claude-sonnet-4-5-thinking",
     "google-antigravity/gemini-3-flash",
@@ -32,19 +25,9 @@
   "packages": [
     {
       "source": "git:github.com/mitsuhiko/agent-stuff",
-      "extensions": [
-        "-pi-extensions/files.ts",
-        "-pi-extensions/loop.ts",
-        "-pi-extensions/go-to-bed.ts"
-      ],
-      "skills": [
-        "-skills/web-browser/SKILL.md",
-        "-skills/openscad/SKILL.md",
-        "-skills/apple-mail/SKILL.md"
-      ],
-      "themes": [
-        "+pi-themes/nightowl.json"
-      ]
+      "extensions": ["-pi-extensions/files.ts", "-pi-extensions/loop.ts"],
+      "skills": ["-skills/web-browser/SKILL.md", "-skills/openscad/SKILL.md"],
+      "themes": ["+pi-themes/nightowl.json"]
     },
     "git:github.com/lucasmeijer/pi-terminal-signals"
   ],

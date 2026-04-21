@@ -27,7 +27,7 @@ jobs:
       - name: Verify Environment
         run: |
           uname -a
-          docker info
+          podman info
           jq --version
           curl --version
 
