@@ -119,13 +119,17 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
     . $HOME/.cargo/env && \
     rm -rf $HOME/.rustup/toolchains/*/share/doc
 
-# Switch to non-root user for setup
+# dorians mq
+RUN curl -sSL https://mqlang.org/install.sh | bash && \
+    curl -sSL https://mqlang.org/install_crawler.sh | bash
 
+# Switch to non-root user for setup
 USER pi
 RUN wget -O /home/pi/.zshrc https://grml.org/console/zshrc && wget -O /home/pi/.zshrc.local https://grml.org/console/zshrc.local
 
 # Switch back to root for entrypoint (it drops privileges after setup)
 USER root
+
 
 # Entrypoint: pass args through to pi
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
