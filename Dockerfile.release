@@ -82,7 +82,9 @@ RUN uv python install --default && \
     uv tool install pytest && \
     uv tool install mitmproxy && \
     uv tool install copier --with copier-template-extensions && \
-    uv tool install ruff
+    uv tool install ruff && \
+    uv tool install ddgs
+
 
 # Install ghcli
 RUN (mkdir -p /usr/share/keyrings && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /usr/share/keyrings/githubcli-archive-keyring.gpg > /dev/null) && \
