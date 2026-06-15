@@ -3,9 +3,9 @@
   "currentMode": "default",
   "modes": {
     "default": {
-      "provider": "kilo-code",
-      "modelId": "z-ai/glm-5:free",
-      "thinkingLevel": "high"
+      "provider": "ollama",
+      "modelId": "gemma4:26b",
+      "thinkingLevel": "low"
     },
     "fast": {
       "provider": "google-antigravity",
